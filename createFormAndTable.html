@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM 3</title> 
+    <style>
+
+body{
+display: flex;
+place-items: center;
+  /* margin:0;
+  padding:0; */
+  background:linear-gradient(90deg,lightgray,darkgray);
+}
+
+.mainDiv{
+/* background-color:hotpink; */
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content: center;
+  gap:1rem;
+}
+
+div{
+  width:18em;
+  /* background-color:orange; */
+  display:flex;
+  place-items:center;
+}
+
+input:hover,div:focus {
+  border-color:royalblue;
+  box-shadow:
+    inset 0 0 .1em .1em #dbe9ee,
+    0 0 .2em .1em #dbe9ee;
+}
+
+form{
+width:25vw;
+height:75vh;
+/* background-color:red; */
+  background:linear-gradient(135deg,#a9d6e5,#61a5c2);
+  border:.3em solid royalblue;
+  border-radius:1em;
+  display:flex;
+  flex-flow:row wrap;
+  /* justify-content:center; */
+  align-items:flex-start;
+  }
+
+lable{
+  margin:.5em;
+  font-size:18px;
+  font-family:poppins sans-serif;
+  color:#222;
+}
+
+input{
+  width:15vw;
+  height: 2vh;
+  margin:1em;
+  font-size:16px;
+  height:1em;
+  border:.15em solid white;
+  border-radius:.5em;
+  outline:none;
+  background:none;
+  
+}
+input[type="submit"]{
+  font-size:16px;
+  width:4em;
+  height:1.7em;
+  align-self:flex-end;
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:focus{
+  background-color:#242F40;
+  color:white;
+}
+
+.tableDiv{
+border: .3em darkgoldenrod solid;
+width:auto;
+height:75vh;
+display: flex;
+flex-flow: row wrap;
+justify-content: center;
+align-items: stretch;
+background-color: wheat;
+border-radius: 1em;
+/* comment 'display:none' to see the table */
+/* display: none;  */
+
+}
+
+th{
+    font-size: 24px;
+    font-weight: bolder;
+}
+td{
+    font-size:20px;
+    font-weight: 600;
+    color: black;
+    padding-left: 2vw;
+}
+@media all and (max-width:920px) {
+  .mainDiv{
+    flex-direction: column;
+  }
+  input{
+  width:100px;
+  height: 20px;
+  }
+  form{
+    width:95% ;
+  }
+  .tableDiv{
+    background-color: wheat;
+    width: 100%;
+    align-self: center;
+
+  }
+  span {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+  }
+  
+}
+
+</style>
+    
+</head>
+<body>
+  
+<script>
+
+const testArr = [{id:"a1",title:"moz",type:"number",defaultValue:"10"},{id:"a2",title:"golabi",type:"text",defaultValue:"2k"},{id:"a3",title:"age",type:"text",defaultValue:"15"}];
+
+formAndTableCreator = (myArr) => {
+
+mainDiv = document.createElement('div');
+mainDiv.classList.add('mainDiv');
+document.body.appendChild(mainDiv);
+const form = document.createElement('form');
+mainDiv.appendChild(form);
+
+for (let c=0;c<myArr.length;c++){
+  
+  const div = document.createElement('div'); //each lable and input live in a div
+  form.appendChild(div);
+  
+  const lable = document.createElement('lable'); // lable
+//   lable.setAttribute('for', );
+  lable.append(myArr[c].title + ':');
+  div.appendChild(lable);
+  
+  const input = document.createElement('input'); //input
+  input.setAttribute('name', myArr[c].id);
+  input.setAttribute('value', myArr[c].defaultValue);
+  input.setAttribute('type', myArr[c].type);
+  div.appendChild(input);
+  }
+  
+  const submitBtn = document.createElement('input'); //submit
+  submitBtn.setAttribute('type', 'submit');
+  submitBtn.setAttribute('value', 'submit');
+  submitBtn.setAttribute('action', '/action_page.php');
+  submitBtn.addEventListener('click', createTable);
+  form.appendChild(submitBtn);    
+
+const keys = Object.keys(testArr[0]);
+tableDiv = document.createElement('div');
+tableDiv.classList.add('tableDiv');
+mainDiv.appendChild(tableDiv);
+
+const table = document.createElement('table');
+tableDiv.appendChild(table);
+ for (let c = 0; c <= myArr.length; c++){
+
+    rows = document.createElement('tr');
+    rows.setAttribute('class',`row${c}`);
+    currentRow.push(rows.getAttribute('class'));
+    
+    table.appendChild(rows);
+
+    if(c===0){
+        for(c1 = 0;c1<keys.length;c1++){
+        const header = document.createElement('th');
+        header.style.width = "10vw";
+        header.append(keys[c1]);
+        rows.appendChild(header);
+        }
+    }
+    else{
+        for(let c2=0;c2<=keys.length;c2++){
+            cells = document.createElement('td');
+            const values = Object.values(myArr[c-1]);
+            cells.append(values[c2]);  
+            rows.appendChild(cells);
+            if(c2===keys.length){
+              cells.innerText = 'delete';
+              cells.setAttribute('id',`${currentRow[c]}`)
+            }
+          }
+          cells.addEventListener('click', () => { // 
+            const del  = document.getElementById(`${currentRow[c]}`)
+            del.parentElement.remove();
+            myArr.splice(c-1,1);
+            console.log(myArr);
+          });
+
+    }
+  }
+}
+
+createTable = () => {
+
+  tableDiv.style.display = 'flex';
+  tableDiv.style.alignItems = 'stretch'; 
+}
+
+currentRow = [];
+
+formAndTableCreator(testArr);
+
+
+</script>
+</body>
+</html>
